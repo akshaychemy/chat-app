@@ -52,7 +52,7 @@ const login = async (req, res) => {
             { expiresIn: '1h' }
         );
 
-        res.status(200).json({ token });
+        res.status(200).json({ "token":token,"userId":user._id });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Internal server error' });
