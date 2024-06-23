@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 const Login = ({ setToken }) => {
     const [username, setUsername] = useState('');
@@ -10,7 +11,7 @@ const Login = ({ setToken }) => {
         try {
             const response = await axios.post('http://localhost:4000/api/auth/login', { username, password });
             setToken(response.data.token);
-            console.log("response==>",response)
+            console.log("response==>",response);
             localStorage.setItem("token", response.data.token);
             localStorage.setItem("userId", response.data.userId);
         } catch (error) {
@@ -36,6 +37,7 @@ const Login = ({ setToken }) => {
                     placeholder="Password"
                     style={styles.input}
                 />
+                <Link to="/register" style={styles.link}>Register</Link>
                 <button type="submit" style={styles.button}>Login</button>
             </form>
         </div>
@@ -75,6 +77,13 @@ const styles = {
         cursor: 'pointer',
         fontSize: '16px',
     },
+    link: {
+        textAlign: 'center',
+        marginBottom: '10px',
+        display: 'block',
+        color: '#007bff',
+        textDecoration: 'none',
+    }
 };
 
 export default Login;
