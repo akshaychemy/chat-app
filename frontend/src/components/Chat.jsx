@@ -41,12 +41,28 @@ const Chat = ({ token, conversationId, currentUserId }) => {
         };
     }, [conversationId, token]);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         if (!newMessage.trim()) return;
 
-        socket.emit('chat message', { conversationId, text: newMessage });
-        setNewMessage('');
+        try {
+            // Send message to backend API
+            const response = await axios.post('http://localhost:4000/api/messages', 
+                { conversation: conversationId, sender: currentUserId, text: newMessage },
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+
+            // Emit message to other connected clients
+            socket.emit('chat message', response.data);
+
+            setNewMessage('');
+        } catch (error) {
+            console.error('Error sending message', error);
+        }
     };
 
     const styles = {
